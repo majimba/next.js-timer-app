@@ -6,7 +6,7 @@ import { formatTime } from '../lib/timeUtils';
 /**
  * Component to display a list of saved timer sessions
  */
-export default function SessionList({ onSelectSession }) {
+export default function SessionList({ onSelectSession, selectedSessionId }) {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -55,12 +55,14 @@ export default function SessionList({ onSelectSession }) {
 
   if (loading) {
     return (
-      <div className="p-3 border-r border-gray-200 h-full">
-        <h2 className="text-lg font-bold mb-3">Sessions</h2>
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded mb-1.5"></div>
-          <div className="h-8 bg-gray-200 rounded mb-1.5"></div>
-          <div className="h-8 bg-gray-200 rounded"></div>
+      <div className="h-full flex flex-col">
+        <div className="p-3 sm:p-4 border-b border-gray-200">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800">Sessions</h2>
+        </div>
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4">
+          <div className="flex justify-center items-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-yellow-500"></div>
+          </div>
         </div>
       </div>
     );
@@ -68,38 +70,61 @@ export default function SessionList({ onSelectSession }) {
 
   if (error) {
     return (
-      <div className="p-3 border-r border-gray-200 h-full">
-        <h2 className="text-lg font-bold mb-3">Sessions</h2>
-        <div className="text-red-500 text-sm">{error}</div>
+      <div className="h-full flex flex-col">
+        <div className="p-3 sm:p-4 border-b border-gray-200">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800">Sessions</h2>
+        </div>
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4">
+          <div className="text-red-500 text-sm">{error}</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-3 border-r border-gray-200 h-full overflow-auto">
-      <h2 className="text-lg font-bold mb-3">Sessions</h2>
+    <div className="h-full flex flex-col">
+      <div className="p-3 sm:p-4 border-b border-gray-200">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-800">Sessions</h2>
+        <p className="text-xs sm:text-sm text-gray-500 mt-1">
+          {sessions.length} {sessions.length === 1 ? 'session' : 'sessions'} saved
+        </p>
+      </div>
       
-      {sessions.length === 0 ? (
-        <div className="text-gray-500 text-sm">No saved sessions yet</div>
-      ) : (
-        <ul className="space-y-1.5">
-          {sessions.map((session, index) => (
-            <li 
-              key={session.id}
-              className="p-2 bg-white rounded-lg shadow hover:shadow-md cursor-pointer transition-shadow"
-              onClick={() => onSelectSession(session)}
-            >
-              <div className="font-medium text-sm">{session.name || `Session ${index + 1}`}</div>
-              <div className="text-xs text-gray-500">
-                Total: {formatTime(session.totalTime)}
-              </div>
-              <div className="text-xs text-gray-400">
-                {session.splits?.length || 0} splits • {session.mode}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4">
+        {sessions.length > 0 ? (
+          <ul className="space-y-2">
+            {sessions.map((session) => (
+              <li 
+                key={session.id}
+                onClick={() => onSelectSession(session)}
+                className={`p-2 sm:p-3 rounded-lg cursor-pointer transition-colors ${
+                  selectedSessionId === session.id 
+                    ? 'bg-yellow-100 border-l-4 border-yellow-500' 
+                    : 'hover:bg-gray-100 border-l-4 border-transparent'
+                }`}
+              >
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="font-medium text-sm sm:text-base">
+                      {session.name || `Session ${session.id}`}
+                    </div>
+                    <div className="text-xs sm:text-sm text-gray-500 mt-1">
+                      {formatDate(session.startTime)}
+                    </div>
+                  </div>
+                  <div className="text-xs sm:text-sm font-mono text-gray-700">
+                    {formatTime(session.totalTime)}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="text-center py-8 text-gray-500 text-sm sm:text-base">
+            No saved sessions yet
+          </div>
+        )}
+      </div>
     </div>
   );
 }

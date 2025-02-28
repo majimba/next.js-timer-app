@@ -14,7 +14,7 @@ export default function SessionDetail({ session, onSessionUpdate, onSessionDelet
 
   if (!session) {
     return (
-      <div className="p-6 bg-white rounded-lg shadow-sm">
+      <div className="p-3 sm:p-6 bg-white rounded-lg shadow-sm">
         <div className="text-gray-500 text-center">
           Select a session to view details
         </div>
@@ -106,37 +106,39 @@ export default function SessionDetail({ session, onSessionUpdate, onSessionDelet
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-sm">
-      <div className="flex justify-between items-center mb-4">
+    <div className="p-3 sm:p-6 bg-white rounded-lg shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
         {isEditing ? (
-          <div className="flex items-center space-x-2 w-full">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full">
             <input
               type="text"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="flex-1 w-full sm:w-auto px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
               value={sessionName}
               onChange={(e) => setSessionName(e.target.value)}
               placeholder="Enter session name"
               autoFocus
             />
-            <button
-              className="px-3 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors"
-              onClick={handleRename}
-            >
-              Save
-            </button>
-            <button
-              className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
-              onClick={() => {
-                setSessionName(session.name || '');
-                setIsEditing(false);
-              }}
-            >
-              Cancel
-            </button>
+            <div className="flex space-x-2">
+              <button
+                className="px-3 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition-colors"
+                onClick={handleRename}
+              >
+                Save
+              </button>
+              <button
+                className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                onClick={() => {
+                  setSessionName(session.name || '');
+                  setIsEditing(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         ) : (
           <>
-            <h3 className="text-xl font-bold">{session.name || 'Unnamed Session'}</h3>
+            <h3 className="text-lg sm:text-xl font-bold">{session.name || 'Unnamed Session'}</h3>
             <button
               className="p-2 text-gray-500 hover:text-yellow-500 transition-colors"
               onClick={() => {
@@ -153,42 +155,42 @@ export default function SessionDetail({ session, onSessionUpdate, onSessionDelet
         )}
       </div>
       
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div>
-          <div className="text-sm text-gray-500">Start Time</div>
-          <div>{formatDate(session.startTime)}</div>
+          <div className="text-xs sm:text-sm text-gray-500">Start Time</div>
+          <div className="text-sm sm:text-base">{formatDate(session.startTime)}</div>
         </div>
         <div>
-          <div className="text-sm text-gray-500">End Time</div>
-          <div>{formatDate(session.endTime)}</div>
+          <div className="text-xs sm:text-sm text-gray-500">End Time</div>
+          <div className="text-sm sm:text-base">{formatDate(session.endTime)}</div>
         </div>
         <div>
-          <div className="text-sm text-gray-500">Duration</div>
-          <div>{durationMinutes}m {durationSeconds}s</div>
+          <div className="text-xs sm:text-sm text-gray-500">Duration</div>
+          <div className="text-sm sm:text-base">{durationMinutes}m {durationSeconds}s</div>
         </div>
         <div>
-          <div className="text-sm text-gray-500">Mode</div>
-          <div className="capitalize">{session.mode}</div>
+          <div className="text-xs sm:text-sm text-gray-500">Mode</div>
+          <div className="capitalize text-sm sm:text-base">{session.mode}</div>
         </div>
       </div>
       
       <div className="mb-4">
-        <div className="text-lg font-semibold mb-2">Total Time</div>
-        <div className="text-2xl font-mono">{formatTime(session.totalTime)}</div>
+        <div className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">Total Time</div>
+        <div className="text-xl sm:text-2xl font-mono">{formatTime(session.totalTime)}</div>
       </div>
       
       {session.splits && session.splits.length > 0 ? (
         <div>
-          <div className="text-lg font-semibold mb-2">Splits</div>
+          <div className="text-base sm:text-lg font-semibold mb-2">Splits</div>
           <div className="overflow-x-auto">
-            <table className="w-full text-left">
+            <table className="w-full text-left text-sm sm:text-base">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="p-2">#</th>
-                  <th className="p-2">
+                  <th className="p-1 sm:p-2">#</th>
+                  <th className="p-1 sm:p-2">
                     {session.mode === 'lap' ? 'Lap Time' : 'Total Time'}
                   </th>
-                  <th className="p-2">
+                  <th className="p-1 sm:p-2">
                     {session.mode === 'lap' ? 'Total Time' : 'Difference'}
                   </th>
                 </tr>
@@ -196,11 +198,11 @@ export default function SessionDetail({ session, onSessionUpdate, onSessionDelet
               <tbody>
                 {session.splits.map((split, index) => (
                   <tr key={index} className="border-b border-gray-200">
-                    <td className="p-2">{index + 1}</td>
-                    <td className="p-2 font-mono">
+                    <td className="p-1 sm:p-2">{index + 1}</td>
+                    <td className="p-1 sm:p-2 font-mono">
                       {formatTime(split.time)}
                     </td>
-                    <td className="p-2 font-mono">
+                    <td className="p-1 sm:p-2 font-mono">
                       {formatTime(split.totalTime)}
                     </td>
                   </tr>
@@ -210,10 +212,10 @@ export default function SessionDetail({ session, onSessionUpdate, onSessionDelet
           </div>
         </div>
       ) : (
-        <div className="text-gray-500">No splits recorded for this session</div>
+        <div className="text-gray-500 text-sm">No splits recorded for this session.</div>
       )}
       
-      <div className="mt-6 text-right">
+      <div className="mt-6 flex justify-end">
         <button 
           className={`px-4 py-2 ${isDeleting ? 'bg-red-600' : 'bg-red-500'} text-white rounded hover:bg-red-600 transition-colors`}
           onClick={handleDelete}

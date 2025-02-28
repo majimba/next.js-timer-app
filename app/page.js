@@ -127,95 +127,97 @@ export default function Home() {
   
   return (
     <TimerLayout>
-      <div className="flex-1 flex flex-col items-center justify-center p-6">
+      <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6">
         <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Timer Display */}
-          <div className="p-8 bg-gradient-to-r from-yellow-400 to-yellow-500 text-center">
-            <h2 className="text-4xl font-bold text-white mb-2">Timer</h2>
-            <div className="text-6xl font-mono font-bold text-white tracking-wider">
+          <div className="p-4 sm:p-8 bg-gradient-to-r from-yellow-400 to-yellow-500 text-center">
+            <h2 className="text-2xl sm:text-4xl font-bold text-white mb-2">Timer</h2>
+            <div className="text-4xl sm:text-6xl font-mono font-bold text-white tracking-wider">
               {formatTime(elapsedTime)}
             </div>
-            <div className="mt-2 text-yellow-100">
+            <div className="mt-2 text-yellow-100 text-sm sm:text-base">
               Mode: <span className="capitalize">{timerMode}</span>
             </div>
           </div>
           
           {/* Timer Controls */}
-          <div className="p-6 flex justify-center space-x-4">
-            <button
-              onClick={isRunning ? stopTimer : startTimer}
-              className={`px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
-                isRunning 
-                  ? 'bg-red-500 hover:bg-red-600' 
-                  : 'bg-green-500 hover:bg-green-600'
-              }`}
-            >
-              {isRunning ? 'Stop' : 'Start'}
-            </button>
-            
-            <button
-              onClick={recordSplit}
-              disabled={!isRunning}
-              className={`px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
-                isRunning 
-                  ? 'bg-blue-500 hover:bg-blue-600' 
-                  : 'bg-gray-300 cursor-not-allowed'
-              }`}
-            >
-              Split
-            </button>
-            
-            <button
-              onClick={resetTimer}
-              disabled={isRunning && elapsedTime === 0}
-              className={`px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
-                elapsedTime > 0 
-                  ? 'bg-gray-500 hover:bg-gray-600' 
-                  : 'bg-gray-300 cursor-not-allowed'
-              }`}
-            >
-              Reset
-            </button>
-            
-            <button
-              onClick={toggleMode}
-              disabled={isRunning || splits.length > 0}
-              className={`px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
-                isRunning || splits.length > 0
-                  ? 'bg-gray-300 cursor-not-allowed'
-                  : 'bg-purple-500 hover:bg-purple-600'
-              }`}
-              title="Toggle between lap and cumulative modes"
-            >
-              Mode
-            </button>
-            
-            <button
-              onClick={saveCurrentSession}
-              disabled={splits.length === 0}
-              className={`px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
-                splits.length > 0
-                  ? 'bg-yellow-500 hover:bg-yellow-600'
-                  : 'bg-gray-300 cursor-not-allowed'
-              }`}
-            >
-              Save
-            </button>
+          <div className="p-6">
+            <div className="flex flex-wrap justify-center gap-3">
+              <button
+                onClick={isRunning ? stopTimer : startTimer}
+                className={`px-4 sm:px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
+                  isRunning 
+                    ? 'bg-red-500 hover:bg-red-600' 
+                    : 'bg-green-500 hover:bg-green-600'
+                }`}
+              >
+                {isRunning ? 'Stop' : 'Start'}
+              </button>
+              
+              <button
+                onClick={recordSplit}
+                disabled={!isRunning}
+                className={`px-4 sm:px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
+                  isRunning 
+                    ? 'bg-blue-500 hover:bg-blue-600' 
+                    : 'bg-gray-300 cursor-not-allowed'
+                }`}
+              >
+                Split
+              </button>
+              
+              <button
+                onClick={resetTimer}
+                disabled={isRunning && elapsedTime === 0}
+                className={`px-4 sm:px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
+                  elapsedTime > 0 
+                    ? 'bg-gray-500 hover:bg-gray-600' 
+                    : 'bg-gray-300 cursor-not-allowed'
+                }`}
+              >
+                Reset
+              </button>
+              
+              <button
+                onClick={toggleMode}
+                disabled={isRunning || splits.length > 0}
+                className={`px-4 sm:px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
+                  isRunning || splits.length > 0
+                    ? 'bg-gray-300 cursor-not-allowed'
+                    : 'bg-purple-500 hover:bg-purple-600'
+                }`}
+                title="Toggle between lap and cumulative modes"
+              >
+                Mode
+              </button>
+              
+              <button
+                onClick={saveCurrentSession}
+                disabled={splits.length === 0}
+                className={`px-4 sm:px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
+                  splits.length > 0
+                    ? 'bg-yellow-500 hover:bg-yellow-600'
+                    : 'bg-gray-300 cursor-not-allowed'
+                }`}
+              >
+                Save
+              </button>
+            </div>
           </div>
           
           {/* Splits Display */}
           {splits.length > 0 && (
-            <div className="p-6 border-t border-gray-100">
-              <h3 className="text-xl font-bold mb-4">Splits</h3>
+            <div className="p-3 sm:p-6 border-t border-gray-100">
+              <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-4">Splits</h3>
               <div className="overflow-x-auto">
-                <table className="w-full text-left">
+                <table className="w-full text-left text-sm sm:text-base">
                   <thead>
                     <tr className="bg-gray-100">
-                      <th className="p-2">#</th>
-                      <th className="p-2">
+                      <th className="p-1 sm:p-2">#</th>
+                      <th className="p-1 sm:p-2">
                         {timerMode === 'lap' ? 'Lap Time' : 'Total Time'}
                       </th>
-                      <th className="p-2">
+                      <th className="p-1 sm:p-2">
                         {timerMode === 'lap' ? 'Total Time' : 'Difference'}
                       </th>
                     </tr>
@@ -223,11 +225,11 @@ export default function Home() {
                   <tbody>
                     {splits.map((split, index) => (
                       <tr key={index} className="border-b border-gray-200">
-                        <td className="p-2">{index + 1}</td>
-                        <td className="p-2 font-mono">
+                        <td className="p-1 sm:p-2">{index + 1}</td>
+                        <td className="p-1 sm:p-2 font-mono">
                           {formatTime(split.time)}
                         </td>
-                        <td className="p-2 font-mono">
+                        <td className="p-1 sm:p-2 font-mono">
                           {formatTime(split.totalTime)}
                         </td>
                       </tr>
