@@ -59,7 +59,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-100">
       {/* Top Navbar */}
       <header className="bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -103,8 +103,15 @@ export default function Home() {
       </header>
 
       {/* Timer section */}
-      <div className="flex items-center justify-center flex-grow">
-        <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-md mx-4">
+      <div className="flex items-center justify-center flex-grow relative">
+        {/* Decorative elements for modern UI feel */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-10 left-10 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+          <div className="absolute top-40 right-10 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-20 left-40 w-72 h-72 bg-yellow-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        </div>
+        
+        <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-md mx-4 backdrop-blur-sm bg-white/90 z-10 border border-yellow-100">
           <div className="flex flex-col items-center text-center">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6 text-yellow-500 font-mono tracking-wider bg-yellow-50 py-4 px-6 rounded-lg w-full">{formatTime()}</h1>
             <div className="flex flex-wrap justify-center gap-3 mt-6 w-full">
@@ -174,7 +181,7 @@ export default function Home() {
       </div>
       
       {/* Bottom Navbar */}
-      <footer className="bg-white shadow-md mt-auto">
+      <footer className="bg-white/90 backdrop-blur-sm shadow-md mt-auto border-t border-yellow-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <aside className="flex items-center">
