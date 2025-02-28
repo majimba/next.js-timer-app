@@ -5,6 +5,7 @@ export default function Home() {
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [splits, setSplits] = useState([]);
+  const [splitMode, setSplitMode] = useState('lap'); // 'lap' or 'cumulative'
   const intervalRef = useRef(null);
 
   useEffect(() => {
@@ -25,6 +26,11 @@ export default function Home() {
   };
 
   const stopTimer = () => {
+    // Record a final split when stopping the timer if there's at least one split already
+    // or if the timer has been running for some time
+    if ((splits.length > 0 || time > 0) && isRunning) {
+      setSplits(prevSplits => [...prevSplits, time]);
+    }
     setIsRunning(false);
   };
 
@@ -32,6 +38,12 @@ export default function Home() {
     setIsRunning(false);
     setTime(0);
     setSplits([]);
+    
+    // Clear any existing interval to prevent memory leaks
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
   };
 
   const addSplit = () => {
@@ -114,6 +126,43 @@ export default function Home() {
         <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-md mx-4 backdrop-blur-sm bg-white/90 z-10 border border-yellow-100">
           <div className="flex flex-col items-center text-center">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6 text-yellow-500 font-mono tracking-wider bg-yellow-50 py-4 px-6 rounded-lg w-full">{formatTime()}</h1>
+            
+            {/* Split counter */}
+            {splits.length > 0 && (
+              <div className="mb-4 bg-yellow-50 py-2 px-4 rounded-lg">
+                <span className="text-yellow-700 font-medium">
+                  Splits: <span className="text-yellow-800 font-bold ml-1">{splits.length}</span>
+                </span>
+              </div>
+            )}
+            
+            {/* Mode toggle */}
+            <div className="mb-6 flex items-center justify-center space-x-2">
+              <span className="text-sm text-gray-600">Mode:</span>
+              <div className="flex rounded-lg bg-gray-100 p-1">
+                <button
+                  onClick={() => setSplitMode('lap')}
+                  className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                    splitMode === 'lap' 
+                      ? 'bg-yellow-500 text-white' 
+                      : 'text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  Lap
+                </button>
+                <button
+                  onClick={() => setSplitMode('cumulative')}
+                  className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                    splitMode === 'cumulative' 
+                      ? 'bg-yellow-500 text-white' 
+                      : 'text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  Cumulative
+                </button>
+              </div>
+            </div>
+            
             <div className="flex flex-wrap justify-center gap-3 mt-6 w-full">
               {!isRunning ? (
                 <button
@@ -148,14 +197,20 @@ export default function Home() {
             
             {splits.length > 0 && (
               <div className="mt-8 w-full">
-                <h2 className="text-xl font-semibold text-gray-800 mb-3">Splits</h2>
+                <h2 className="text-xl font-semibold text-gray-800 mb-3">
+                  Split Times
+                </h2>
                 <div className="max-h-60 overflow-y-auto overflow-x-auto rounded-lg shadow">
                   <table className="min-w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-yellow-50">
                         <th className="py-3 px-4 font-semibold text-yellow-800 border-b border-yellow-200 text-sm sm:text-base">#</th>
-                        <th className="py-3 px-4 font-semibold text-yellow-800 border-b border-yellow-200 text-sm sm:text-base">Split Time</th>
-                        <th className="py-3 px-4 font-semibold text-yellow-800 border-b border-yellow-200 text-sm sm:text-base">Overall Time</th>
+                        <th className="py-3 px-4 font-semibold text-yellow-800 border-b border-yellow-200 text-sm sm:text-base">
+                          {splitMode === 'lap' ? 'Lap Time' : 'Total Time'}
+                        </th>
+                        <th className="py-3 px-4 font-semibold text-yellow-800 border-b border-yellow-200 text-sm sm:text-base">
+                          {splitMode === 'lap' ? 'Total Time' : 'Difference'}
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -163,11 +218,22 @@ export default function Home() {
                         const prevSplitTime = index > 0 ? splits[index - 1] : 0;
                         const lapTime = splitTime - prevSplitTime;
                         
+                        // For cumulative mode, calculate time difference between runners
+                        const timeDiff = index > 0 ? lapTime : splitTime;
+                        
                         return (
                           <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-yellow-50"}>
                             <td className="py-3 px-4 border-b border-yellow-100 text-yellow-800 font-medium text-sm sm:text-base">{index + 1}</td>
-                            <td className="py-3 px-4 border-b border-yellow-100 font-mono text-yellow-800 font-medium text-sm sm:text-base">{formatTimeValue(lapTime)}</td>
-                            <td className="py-3 px-4 border-b border-yellow-100 font-mono text-yellow-800 font-medium text-sm sm:text-base">{formatTimeValue(splitTime)}</td>
+                            <td className="py-3 px-4 border-b border-yellow-100 font-mono text-yellow-800 font-medium text-sm sm:text-base">
+                              {splitMode === 'lap' 
+                                ? formatTimeValue(lapTime) 
+                                : formatTimeValue(splitTime)}
+                            </td>
+                            <td className="py-3 px-4 border-b border-yellow-100 font-mono text-yellow-800 font-medium text-sm sm:text-base">
+                              {splitMode === 'lap' 
+                                ? formatTimeValue(splitTime) 
+                                : formatTimeValue(timeDiff)}
+                            </td>
                           </tr>
                         );
                       })}
