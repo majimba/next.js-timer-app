@@ -55,12 +55,12 @@ export default function SessionList({ onSelectSession }) {
 
   if (loading) {
     return (
-      <div className="p-4 border-r border-gray-200 h-full">
-        <h2 className="text-xl font-bold mb-4">Sessions</h2>
+      <div className="p-3 border-r border-gray-200 h-full">
+        <h2 className="text-lg font-bold mb-3">Sessions</h2>
         <div className="animate-pulse">
-          <div className="h-10 bg-gray-200 rounded mb-2"></div>
-          <div className="h-10 bg-gray-200 rounded mb-2"></div>
-          <div className="h-10 bg-gray-200 rounded"></div>
+          <div className="h-8 bg-gray-200 rounded mb-1.5"></div>
+          <div className="h-8 bg-gray-200 rounded mb-1.5"></div>
+          <div className="h-8 bg-gray-200 rounded"></div>
         </div>
       </div>
     );
@@ -68,33 +68,33 @@ export default function SessionList({ onSelectSession }) {
 
   if (error) {
     return (
-      <div className="p-4 border-r border-gray-200 h-full">
-        <h2 className="text-xl font-bold mb-4">Sessions</h2>
-        <div className="text-red-500">{error}</div>
+      <div className="p-3 border-r border-gray-200 h-full">
+        <h2 className="text-lg font-bold mb-3">Sessions</h2>
+        <div className="text-red-500 text-sm">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="p-4 border-r border-gray-200 h-full overflow-auto">
-      <h2 className="text-xl font-bold mb-4">Sessions</h2>
+    <div className="p-3 border-r border-gray-200 h-full overflow-auto">
+      <h2 className="text-lg font-bold mb-3">Sessions</h2>
       
       {sessions.length === 0 ? (
-        <div className="text-gray-500">No saved sessions yet</div>
+        <div className="text-gray-500 text-sm">No saved sessions yet</div>
       ) : (
-        <ul className="space-y-2">
-          {sessions.map((session) => (
+        <ul className="space-y-1.5">
+          {sessions.map((session, index) => (
             <li 
               key={session.id}
-              className="p-3 bg-white rounded-lg shadow hover:shadow-md cursor-pointer transition-shadow"
+              className="p-2 bg-white rounded-lg shadow hover:shadow-md cursor-pointer transition-shadow"
               onClick={() => onSelectSession(session)}
             >
-              <div className="font-medium">{formatDate(session.startTime)}</div>
-              <div className="text-sm text-gray-500">
+              <div className="font-medium text-sm">{session.name || `Session ${index + 1}`}</div>
+              <div className="text-xs text-gray-500">
                 Total: {formatTime(session.totalTime)}
               </div>
               <div className="text-xs text-gray-400">
-                {session.splits?.length || 0} splits • {session.mode} mode
+                {session.splits?.length || 0} splits • {session.mode}
               </div>
             </li>
           ))}

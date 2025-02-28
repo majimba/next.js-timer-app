@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SessionList from './SessionList';
 import SessionDetail from './SessionDetail';
+import { getSessions } from '../lib/sessionStorage';
 
 /**
  * Component that provides the layout for the timer application
@@ -11,10 +12,51 @@ import SessionDetail from './SessionDetail';
 export default function TimerLayout({ children }) {
   const [selectedSession, setSelectedSession] = useState(null);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [sessions, setSessions] = useState([]);
+
+  // Load sessions on mount
+  useEffect(() => {
+    const loadSessions = () => {
+      const allSessions = getSessions();
+      setSessions(allSessions);
+    };
+
+    loadSessions();
+
+    // Set up event listener for storage changes
+    const handleStorageChange = (e) => {
+      if (e.key === 'timer_sessions') {
+        loadSessions();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   // Handler for selecting a session
   const handleSelectSession = (session) => {
     setSelectedSession(session);
+  };
+
+  // Handler for updating a session
+  const handleSessionUpdate = (updatedSession) => {
+    setSessions(prevSessions => {
+      const newSessions = prevSessions.map(s => 
+        s.id === updatedSession.id ? updatedSession : s
+      );
+      return newSessions;
+    });
+    
+    setSelectedSession(updatedSession);
+  };
+
+  // Handler for deleting a session
+  const handleSessionDelete = (sessionId) => {
+    setSessions(prevSessions => prevSessions.filter(s => s.id !== sessionId));
+    setSelectedSession(null);
   };
 
   return (
@@ -58,8 +100,11 @@ export default function TimerLayout({ children }) {
       {/* Main content area with sidebar and timer */}
       <div className="flex flex-1 overflow-hidden">
         {/* Session sidebar - hidden on mobile by default */}
-        <div className={`w-80 bg-white shadow-md ${showSidebar ? 'block' : 'hidden'} md:block flex-shrink-0`}>
-          <SessionList onSelectSession={handleSelectSession} />
+        <div className={`w-64 bg-white shadow-md ${showSidebar ? 'block' : 'hidden'} md:block flex-shrink-0`}>
+          <SessionList 
+            onSelectSession={handleSelectSession} 
+            sessions={sessions}
+          />
         </div>
         
         {/* Main content */}
@@ -81,7 +126,11 @@ export default function TimerLayout({ children }) {
             {/* Session detail section - show when a session is selected */}
             {selectedSession && (
               <div className="p-4 border-t border-gray-200 bg-white">
-                <SessionDetail session={selectedSession} />
+                <SessionDetail 
+                  session={selectedSession} 
+                  onSessionUpdate={handleSessionUpdate}
+                  onSessionDelete={handleSessionDelete}
+                />
               </div>
             )}
           </div>
@@ -89,47 +138,16 @@ export default function TimerLayout({ children }) {
       </div>
       
       {/* Bottom Navbar */}
-      <footer className="bg-white/90 backdrop-blur-sm shadow-md mt-auto border-t border-yellow-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <aside className="flex items-center">
-              <p className="text-yellow-500">Copyright {new Date().getFullYear()} - All right reserved</p>
-            </aside>
-            <nav className="flex gap-4">
-              <a className="text-yellow-500 hover:text-yellow-600">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  className="fill-current text-yellow-500">
-                  <path
-                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-                </svg>
-              </a>
-              <a className="text-yellow-500 hover:text-yellow-600">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  className="fill-current text-yellow-500">
-                  <path
-                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
-                </svg>
-              </a>
-              <a className="text-yellow-500 hover:text-yellow-600">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  className="fill-current text-yellow-500">
-                  <path
-                    d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
-                </svg>
-              </a>
-            </nav>
+      <footer className="bg-white shadow-md mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-12">
+            <div className="text-sm text-gray-500">
+              Timer App &copy; 2025
+            </div>
+            <div className="flex space-x-4">
+              <a href="#" className="text-gray-400 hover:text-yellow-500">Help</a>
+              <a href="#" className="text-gray-400 hover:text-yellow-500">Settings</a>
+            </div>
           </div>
         </div>
       </footer>
