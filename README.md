@@ -14,7 +14,7 @@ A Next.js timer app with millisecond precision and split functionality. Features
 
 ## Screenshots
 
-*[Add screenshots of your application here]*
+![Timer App Screenshot](/public/images/screenshot.jpg)
 
 ## Getting Started
 
