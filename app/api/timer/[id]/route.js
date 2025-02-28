@@ -33,42 +33,64 @@ const mockSessions = [
 ];
 
 export async function GET(request, { params }) {
-  const id = params.id;
-  
-  // Find the session by ID
-  const session = mockSessions.find(s => s.id === id);
-  
-  if (!session) {
+  try {
+    // Extract the id from the URL path
+    const url = new URL(request.url);
+    const pathParts = url.pathname.split('/');
+    const id = pathParts[pathParts.length - 1];
+    
+    // Find the session by ID
+    const session = mockSessions.find(s => s.id === id);
+    
+    if (!session) {
+      return NextResponse.json({ 
+        status: 'error',
+        message: 'Session not found'
+      }, { status: 404 });
+    }
+    
+    return NextResponse.json({ 
+      status: 'success',
+      data: session
+    });
+  } catch (error) {
+    console.error('Error in GET:', error);
     return NextResponse.json({ 
       status: 'error',
-      message: 'Session not found'
-    }, { status: 404 });
+      message: 'Internal server error'
+    }, { status: 500 });
   }
-  
-  return NextResponse.json({ 
-    status: 'success',
-    data: session
-  });
 }
 
 export async function DELETE(request, { params }) {
-  const id = params.id;
-  
-  // In a real implementation, this would delete from a database
-  // For now, we'll just pretend it was deleted
-  
-  // Check if session exists
-  const sessionExists = mockSessions.some(s => s.id === id);
-  
-  if (!sessionExists) {
+  try {
+    // Extract the id from the URL path
+    const url = new URL(request.url);
+    const pathParts = url.pathname.split('/');
+    const id = pathParts[pathParts.length - 1];
+    
+    // In a real implementation, this would delete from a database
+    // For now, we'll just pretend it was deleted
+    
+    // Check if session exists
+    const sessionExists = mockSessions.some(s => s.id === id);
+    
+    if (!sessionExists) {
+      return NextResponse.json({ 
+        status: 'error',
+        message: 'Session not found'
+      }, { status: 404 });
+    }
+    
+    return NextResponse.json({ 
+      status: 'success',
+      message: 'Session deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error in DELETE:', error);
     return NextResponse.json({ 
       status: 'error',
-      message: 'Session not found'
-    }, { status: 404 });
+      message: 'Internal server error'
+    }, { status: 500 });
   }
-  
-  return NextResponse.json({ 
-    status: 'success',
-    message: 'Session deleted successfully'
-  });
 }
