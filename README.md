@@ -7,8 +7,10 @@ A Next.js timer app with millisecond precision and split functionality. Features
 - **Precise Timing**: Tracks time with millisecond precision
 - **Intuitive Controls**: Simple start, stop, and reset functionality
 - **Split Times**: Record and display split times while the timer is running
+- **Split Modes**: Switch between Lap mode (interval timing) and Cumulative mode (total timing)
+- **Auto-Record Final Split**: Automatically records the final split when stopping the timer
 - **Responsive Design**: Works on desktop and mobile devices
-- **Modern UI**: Clean interface built with Tailwind CSS
+- **Modern UI**: Clean interface with animated background elements built with Tailwind CSS
 
 ## Screenshots
 
@@ -34,16 +36,20 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 1. **Start Timer**: Click the green "Start" button to begin timing
 2. **Record Split**: While the timer is running, click the blue "Split" button to record a split time
-3. **Stop Timer**: Click the red "Stop" button to pause the timer
+3. **Stop Timer**: Click the red "Stop" button to pause the timer (automatically records final split)
 4. **Reset Timer**: Click the "Reset" button to set the timer back to 00:00:00 and clear all splits
+5. **Switch Modes**: Use the mode toggle to switch between:
+   - **Lap Mode**: Shows the time for each individual lap and the total time
+   - **Cumulative Mode**: Shows the total time at each split and the difference between splits
 
 ## Technical Implementation
 
 The app uses:
 - React's `useState` and `useEffect` hooks for state management
 - `useRef` to properly handle timer intervals
-- Tailwind CSS for styling
+- Tailwind CSS for styling with custom animations
 - Conditional rendering for dynamic UI elements
+- CSS animations for background elements
 
 ## Future Enhancements
 
