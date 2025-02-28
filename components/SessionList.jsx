@@ -104,15 +104,15 @@ export default function SessionList({ onSelectSession, selectedSessionId }) {
                 }`}
               >
                 <div className="flex justify-between items-center">
-                  <div>
-                    <div className="font-medium text-sm sm:text-base">
+                  <div className="overflow-hidden">
+                    <div className="font-medium text-sm sm:text-base truncate">
                       {session.name || `Session ${session.id}`}
                     </div>
                     <div className="text-xs sm:text-sm text-gray-500 mt-1">
                       {formatDate(session.startTime)}
                     </div>
                   </div>
-                  <div className="text-xs sm:text-sm font-mono text-gray-700">
+                  <div className="text-xs sm:text-sm font-mono text-gray-700 ml-2 flex-shrink-0">
                     {formatTime(session.totalTime)}
                   </div>
                 </div>

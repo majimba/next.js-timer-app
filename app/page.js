@@ -132,7 +132,7 @@ export default function Home() {
           {/* Timer Display */}
           <div className="p-4 sm:p-8 bg-gradient-to-r from-yellow-400 to-yellow-500 text-center">
             <h2 className="text-2xl sm:text-4xl font-bold text-white mb-2">Timer</h2>
-            <div className="text-4xl sm:text-6xl font-mono font-bold text-white tracking-wider">
+            <div className="text-5xl sm:text-6xl font-mono font-bold text-white tracking-wider">
               {formatTime(elapsedTime)}
             </div>
             <div className="mt-2 text-yellow-100 text-sm sm:text-base">
@@ -141,8 +141,8 @@ export default function Home() {
           </div>
           
           {/* Timer Controls */}
-          <div className="p-6">
-            <div className="flex flex-wrap justify-center gap-3">
+          <div className="p-4 sm:p-6">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-2 sm:gap-3">
               <button
                 onClick={isRunning ? stopTimer : startTimer}
                 className={`px-4 sm:px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
@@ -194,7 +194,7 @@ export default function Home() {
               <button
                 onClick={saveCurrentSession}
                 disabled={splits.length === 0}
-                className={`px-4 sm:px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
+                className={`col-span-2 sm:col-span-1 px-4 sm:px-6 py-3 rounded-lg font-bold text-white shadow-md transition-colors ${
                   splits.length > 0
                     ? 'bg-yellow-500 hover:bg-yellow-600'
                     : 'bg-gray-300 cursor-not-allowed'
@@ -209,15 +209,15 @@ export default function Home() {
           {splits.length > 0 && (
             <div className="p-3 sm:p-6 border-t border-gray-100">
               <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-4">Splits</h3>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto -mx-3 sm:mx-0">
                 <table className="w-full text-left text-sm sm:text-base">
                   <thead>
                     <tr className="bg-gray-100">
-                      <th className="p-1 sm:p-2">#</th>
+                      <th className="p-1 sm:p-2 pl-3 sm:pl-2">#</th>
                       <th className="p-1 sm:p-2">
                         {timerMode === 'lap' ? 'Lap Time' : 'Total Time'}
                       </th>
-                      <th className="p-1 sm:p-2">
+                      <th className="p-1 sm:p-2 pr-3 sm:pr-2">
                         {timerMode === 'lap' ? 'Total Time' : 'Difference'}
                       </th>
                     </tr>
@@ -225,11 +225,11 @@ export default function Home() {
                   <tbody>
                     {splits.map((split, index) => (
                       <tr key={index} className="border-b border-gray-200">
-                        <td className="p-1 sm:p-2">{index + 1}</td>
+                        <td className="p-1 sm:p-2 pl-3 sm:pl-2">{index + 1}</td>
                         <td className="p-1 sm:p-2 font-mono">
                           {formatTime(split.time)}
                         </td>
-                        <td className="p-1 sm:p-2 font-mono">
+                        <td className="p-1 sm:p-2 pr-3 sm:pr-2 font-mono">
                           {formatTime(split.totalTime)}
                         </td>
                       </tr>

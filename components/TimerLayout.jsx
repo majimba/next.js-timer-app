@@ -66,6 +66,15 @@ export default function TimerLayout({ children }) {
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
           <div className="flex justify-between h-14 sm:h-16">
             <div className="flex items-center">
+              <button 
+                className="p-1 rounded-full text-gray-400 hover:text-yellow-500 focus:outline-none md:hidden mr-1"
+                onClick={() => setShowSidebar(!showSidebar)}
+                aria-label="Toggle sidebar"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
+                </svg>
+              </button>
               <svg
                 width="28"
                 height="28"
@@ -82,14 +91,6 @@ export default function TimerLayout({ children }) {
               </div>
             </div>
             <div className="flex items-center">
-              <button 
-                className="p-1 rounded-full text-gray-400 hover:text-yellow-500 focus:outline-none md:hidden"
-                onClick={() => setShowSidebar(!showSidebar)}
-              >
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
-                </svg>
-              </button>
               <button className="ml-3 p-1 rounded-full text-gray-400 hover:text-yellow-500 focus:outline-none">
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -103,17 +104,17 @@ export default function TimerLayout({ children }) {
       {/* Main content area with sidebar and timer */}
       <div className="flex flex-1 overflow-hidden">
         {/* Session sidebar - hidden on mobile by default */}
-        <div className={`w-64 bg-white shadow-md ${showSidebar ? 'block' : 'hidden'} md:block flex-shrink-0 fixed md:static h-full md:h-auto z-10`}>
+        <div className={`${showSidebar ? 'fixed inset-0 z-50 bg-black bg-opacity-50' : 'hidden'} md:hidden`} onClick={() => setShowSidebar(false)}></div>
+        <div className={`w-64 bg-white shadow-md ${showSidebar ? 'block fixed left-0 top-14 bottom-0 z-50' : 'hidden'} md:block md:static md:h-auto flex-shrink-0`}>
           <SessionList 
             onSelectSession={handleSelectSession} 
             sessions={sessions}
+            selectedSessionId={selectedSession?.id}
           />
         </div>
         
         {/* Main content */}
-        <div className={`flex-1 flex flex-col overflow-auto ${showSidebar ? 'md:ml-0' : 'ml-0'}`}>
-          {/* Mobile sidebar toggle - moved to header */}
-          
+        <div className="flex-1 flex flex-col overflow-auto">
           {/* Timer section */}
           <div className="flex-1 flex flex-col">
             {children}
