@@ -7,8 +7,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic':
+          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
       animation: {
         blob: 'blob 7s infinite',
+        'swipe-right': 'swipeRight 1.5s ease-in-out infinite',
       },
       keyframes: {
         blob: {
@@ -24,6 +30,11 @@ module.exports = {
           '100%': {
             transform: 'translate(0px, 0px) scale(1)',
           },
+        },
+        swipeRight: {
+          '0%': { transform: 'translateX(-10px)', opacity: '0.7' },
+          '60%': { transform: 'translateX(5px)', opacity: '1' },
+          '100%': { transform: 'translateX(-10px)', opacity: '0.7' },
         },
       },
       transitionDelay: {

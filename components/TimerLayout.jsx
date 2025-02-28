@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getSessions } from '../lib/sessionStorage';
 import SessionList from './SessionList';
 import SessionDetail from './SessionDetail';
-import { getSessions } from '../lib/sessionStorage';
+import useSwipeGesture from '../hooks/useSwipeGesture';
 
 /**
  * Component that provides the layout for the timer application
@@ -11,19 +12,27 @@ import { getSessions } from '../lib/sessionStorage';
  */
 export default function TimerLayout({ children }) {
   const [selectedSession, setSelectedSession] = useState(null);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [sessions, setSessions] = useState([]);
+  const [showSwipeHint, setShowSwipeHint] = useState(true);
+
+  // Initialize swipe gesture detection
+  const { swipeDirection, handlers } = useSwipeGesture();
 
   // Load sessions on mount
   useEffect(() => {
-    const loadSessions = () => {
-      const allSessions = getSessions();
-      setSessions(allSessions);
+    const loadSessions = async () => {
+      try {
+        const data = await getSessions();
+        setSessions(data);
+      } catch (error) {
+        console.error('Error loading sessions:', error);
+      }
     };
 
     loadSessions();
 
-    // Set up event listener for storage changes
+    // Handle storage changes from other tabs/windows
     const handleStorageChange = (e) => {
       if (e.key === 'timer_sessions') {
         loadSessions();
@@ -31,10 +40,26 @@ export default function TimerLayout({ children }) {
     };
 
     window.addEventListener('storage', handleStorageChange);
+
+    // Hide swipe hint after 3 seconds
+    const timer = setTimeout(() => {
+      setShowSwipeHint(false);
+    }, 3000);
+
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      clearTimeout(timer);
     };
   }, []);
+
+  // Handle swipe gestures
+  useEffect(() => {
+    if (swipeDirection === 'right') {
+      setShowSidebar(true);
+    } else if (swipeDirection === 'left') {
+      setShowSidebar(false);
+    }
+  }, [swipeDirection]);
 
   // Handler for selecting a session
   const handleSelectSession = (session) => {
@@ -114,7 +139,25 @@ export default function TimerLayout({ children }) {
         </div>
         
         {/* Main content */}
-        <div className="flex-1 flex flex-col overflow-auto">
+        <div 
+          className="flex-1 flex flex-col overflow-auto relative"
+          {...handlers}
+        >
+          {/* Edge indicator for swipe */}
+          <div className="fixed left-0 top-1/4 bottom-1/4 w-1 bg-yellow-200 opacity-50 md:hidden z-10" />
+          
+          {/* Swipe hint animation */}
+          {showSwipeHint && !showSidebar && (
+            <div className="fixed left-0 top-1/2 transform -translate-y-1/2 bg-yellow-100 text-yellow-800 rounded-r-full py-2 px-3 shadow-md z-20 md:hidden">
+              <div className="flex items-center animate-swipe-right">
+                <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+                <span className="text-xs font-medium">Swipe</span>
+              </div>
+            </div>
+          )}
+          
           {/* Timer section */}
           <div className="flex-1 flex flex-col">
             {children}
