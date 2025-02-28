@@ -104,35 +104,35 @@ export default function Home() {
 
       {/* Timer section */}
       <div className="flex items-center justify-center flex-grow">
-        <div className="bg-white p-8 rounded-lg shadow-md w-96">
+        <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-md mx-4">
           <div className="flex flex-col items-center text-center">
-            <h1 className="text-5xl font-bold mb-6 text-yellow-500 font-mono">{formatTime()}</h1>
-            <div className="flex justify-center gap-4 mt-6">
+            <h1 className="text-4xl sm:text-5xl font-bold mb-6 text-yellow-500 font-mono tracking-wider bg-yellow-50 py-4 px-6 rounded-lg w-full">{formatTime()}</h1>
+            <div className="flex flex-wrap justify-center gap-3 mt-6 w-full">
               {!isRunning ? (
                 <button
                   onClick={startTimer}
-                  className="px-4 py-2 border border-green-500 text-green-500 rounded-md hover:bg-green-500 hover:text-white transition-colors"
+                  className="px-4 py-2 border border-green-500 text-green-500 rounded-md hover:bg-green-500 hover:text-white transition-colors text-sm sm:text-base font-medium"
                 >
                   Start
                 </button>
               ) : (
                 <button
                   onClick={stopTimer}
-                  className="px-4 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition-colors"
+                  className="px-4 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition-colors text-sm sm:text-base font-medium"
                 >
                   Stop
                 </button>
               )}
               <button
                 onClick={resetTimer}
-                className="px-4 py-2 border border-gray-500 text-gray-500 rounded-md hover:bg-gray-500 hover:text-white transition-colors"
+                className="px-4 py-2 border border-gray-500 text-gray-500 rounded-md hover:bg-gray-500 hover:text-white transition-colors text-sm sm:text-base font-medium"
               >
                 Reset
               </button>
               {isRunning && (
                 <button
                   onClick={addSplit}
-                  className="px-4 py-2 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-500 hover:text-white transition-colors"
+                  className="px-4 py-2 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-500 hover:text-white transition-colors text-sm sm:text-base font-medium"
                 >
                   Split
                 </button>
@@ -141,14 +141,14 @@ export default function Home() {
             
             {splits.length > 0 && (
               <div className="mt-8 w-full">
-                <h2 className="text-xl font-semibold text-gray-700 mb-3">Splits</h2>
-                <div className="max-h-60 overflow-y-auto">
-                  <table className="w-full text-left border-collapse">
+                <h2 className="text-xl font-semibold text-gray-800 mb-3">Splits</h2>
+                <div className="max-h-60 overflow-y-auto overflow-x-auto rounded-lg shadow">
+                  <table className="min-w-full text-left border-collapse">
                     <thead>
-                      <tr className="bg-gray-100">
-                        <th className="py-2 px-4 border-b">#</th>
-                        <th className="py-2 px-4 border-b">Split Time</th>
-                        <th className="py-2 px-4 border-b">Overall Time</th>
+                      <tr className="bg-yellow-50">
+                        <th className="py-3 px-4 font-semibold text-yellow-800 border-b border-yellow-200 text-sm sm:text-base">#</th>
+                        <th className="py-3 px-4 font-semibold text-yellow-800 border-b border-yellow-200 text-sm sm:text-base">Split Time</th>
+                        <th className="py-3 px-4 font-semibold text-yellow-800 border-b border-yellow-200 text-sm sm:text-base">Overall Time</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -157,10 +157,10 @@ export default function Home() {
                         const lapTime = splitTime - prevSplitTime;
                         
                         return (
-                          <tr key={index} className="hover:bg-gray-50">
-                            <td className="py-2 px-4 border-b">{index + 1}</td>
-                            <td className="py-2 px-4 border-b font-mono">{formatTimeValue(lapTime)}</td>
-                            <td className="py-2 px-4 border-b font-mono">{formatTimeValue(splitTime)}</td>
+                          <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-yellow-50"}>
+                            <td className="py-3 px-4 border-b border-yellow-100 text-yellow-800 font-medium text-sm sm:text-base">{index + 1}</td>
+                            <td className="py-3 px-4 border-b border-yellow-100 font-mono text-yellow-800 font-medium text-sm sm:text-base">{formatTimeValue(lapTime)}</td>
+                            <td className="py-3 px-4 border-b border-yellow-100 font-mono text-yellow-800 font-medium text-sm sm:text-base">{formatTimeValue(splitTime)}</td>
                           </tr>
                         );
                       })}
