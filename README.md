@@ -1,4 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Timer App
+
+A Next.js timer app with millisecond precision and split functionality. Features include start/stop controls, reset, and the ability to record and display split times. Built with React and styled using Tailwind CSS.
+
+## Features
+
+- **Precise Timing**: Tracks time with millisecond precision
+- **Intuitive Controls**: Simple start, stop, and reset functionality
+- **Split Times**: Record and display split times while the timer is running
+- **Responsive Design**: Works on desktop and mobile devices
+- **Modern UI**: Clean interface built with Tailwind CSS
+
+## Screenshots
+
+*[Add screenshots of your application here]*
 
 ## Getting Started
 
@@ -16,9 +30,29 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## How to Use
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Start Timer**: Click the green "Start" button to begin timing
+2. **Record Split**: While the timer is running, click the blue "Split" button to record a split time
+3. **Stop Timer**: Click the red "Stop" button to pause the timer
+4. **Reset Timer**: Click the "Reset" button to set the timer back to 00:00:00 and clear all splits
+
+## Technical Implementation
+
+The app uses:
+- React's `useState` and `useEffect` hooks for state management
+- `useRef` to properly handle timer intervals
+- Tailwind CSS for styling
+- Conditional rendering for dynamic UI elements
+
+## Future Enhancements
+
+Potential future features include:
+- Countdown timer functionality
+- Custom time input
+- Sound alerts
+- Dark/light mode toggle
+- Persistent storage of times
 
 ## Learn More
 
@@ -26,8 +60,6 @@ To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
 ## Deploy on Vercel
 
